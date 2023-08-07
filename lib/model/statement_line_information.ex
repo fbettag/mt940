@@ -52,6 +52,9 @@ defmodule MT940.StatementLineInformation do
   end
 
 
+  defp assign_sub_fields([10, prima_nota], acc = %__MODULE__{}) when prima_nota in [nil, ""], do: acc
+
+
   defp assign_sub_fields([10, prima_nota], acc = %__MODULE__{}) do
     %__MODULE__{acc | prima_nota: prima_nota |> String.to_integer}
   end

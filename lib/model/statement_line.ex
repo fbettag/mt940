@@ -23,9 +23,13 @@ defmodule MT940.StatementLine do
   use MT940.Field
 
   defp parse_content(result = %__MODULE__{content: content}) do
-    matches = ~r/^(\d{6})(\d{4})?(C|D|RC|RD)\D?(\d{1,12},\d{0,2})((?:N|F).{3})(NONREF|.{0,16})(?:$|\/\/)(.*)/
+    ~r/^(\d{6})(\d{4})?(CR|C|D|RC|RD)\D?(\d{1,12},\d{0,2})((?:N|F).{3})(NONREF|.{0,16}).*/
     |> Regex.run(content, capture: :all_but_first)
+    |> parse_matches(result)
+  end
 
+  defp parse_matches(nil, result = %__MODULE__{}), do: result
+  defp parse_matches(matches, result = %__MODULE__{}) do
     value_date = case matches |> Enum.at(0) |> Timex.parse("{YY}{M}{D}") do
       {:ok, vd} -> vd
       _ -> Timex.now()
@@ -36,6 +40,7 @@ defmodule MT940.StatementLine do
     end
     funds_code = case matches |> Enum.at(2) do
       "C"  -> :credit
+      "CR"  -> :credit
       "D"  -> :debit
       "RC" -> :return_credit
       "RD" -> :return_debit

@@ -21,7 +21,7 @@ defmodule Mt940.Mixfile do
   defp deps do
     [
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
-      {:decimal, "~> 2.0.0"},
+      {:decimal, "~> 2.1.1"},
       {:ex_doc, "~> 0.20.2", only: :dev},
       {:timex, "~> 3.6.1"},
       {:exjsx, "~> 4.0.0", only: :test},
